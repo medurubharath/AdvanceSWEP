@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% load cart %}
+{% load custom_filter %}
+<div style="background-color: #1f2833;">
+<div class="container">
+  
+   <div class="border rounded p-4 m-4" style="background-color: whitesmoke;">
+        <p class="display-4 pl-4 ml-4">Your Cart</p>
+        <hr>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sno.</th>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+
+
+            
+            <tbody>
+                
+                {% for product in products %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td><img style="height: 80px;" class="rounded-circle" src="{{product.image.url}}" alt=""></td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.price|currency}}</td>
+                    <td>{{product|cart_quantity:request.session.cart}}</td>
+                    <td>{{product|price_total:request.session.cart|currency}}</td>
+                </tr>
+
+                {% endfor %}
+               
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <th colspan="4"></th>
+                    <th class="" colspan="">Total</th>
+                    <th>{{products|total_cart_price:request.session.cart|currency}}</th>
+                </tr>
+            </tfoot>
+        </table>
+        <hr>
+        <div class="m-3 p-3">
+            <a href="#" data-toggle="modal" data-target="#exampleModal" class="btn btn-outline-info border rounded  col-lg-3 float-right">Check out</a>
+        </div>
+   </div>
+  </div>
+</div>
+
+
+<!-- modal -->
+
+  <!-- Modal -->
+  <div style="background-color: whitesmoke;">
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+              Check Out Form
+          </h5>
+          <hr>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="m-2 p-3">
+            <form action="/check-out" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="">Address:</label>
+                  <input type="text" name="address" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                  
+                </div>
+                <div class="form-group">
+                    <label for="">Phone:</label>
+                    <input type="text" name="phone" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                  </div>
+                <!-----  Payment Gateway -->
+                <h4> Payment Gateway </h4>
+                <div class="card" style="background-color:silver;">
+              
+                  <div  class = "center" style="width:250px; margin:0 auto;">
+                    <label for="">Cardholder Name:</label> <br>
+                    <input type="text" name="address" id=""  placeholder="" aria-describedby="helpId" maxlength="25" size="25">
+                    
+                  </div>
+                  <div class = "center" style="width:250px; margin:0 auto;">
+                      <label for="">Card Number</label> <br>
+                      <input type="text" name="phone" id=""  placeholder="" aria-describedby="helpId" maxlength="16" size="25">
+                    </div>
+
+                    <div class = "center" style="width:250px; margin:0 auto;">
+                      <label for="">Expiry Date</label> <br>
+                      <label for="">month:</label>
+                      <input type="text" name="address" id=""  placeholder="" aria-describedby="helpId" maxlength="2" size="2">
+                      <label for="">Year:</label>
+                      <input type="text" name="address" id=""  placeholder="" aria-describedby="helpId" maxlength="4" size="4"> <br>
+                    </div>
+                    <div class = "center" style="width:250px; margin:0 auto;">
+                        <label for="">CVV:</label>
+                        <input type="text" id="pin" name="pin" maxlength="4" size="4">
+                      </div>
+                </div>
+              <br>
+                  <input type="submit" class="btn float-right btn-outline-info col-lg-6" value="Check out">
+            </form>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

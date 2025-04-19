@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load cart %}
+{% load custom_filter %}
+<!-- body -->
+<div style="background-color: #0b0c10;">
+<div class="container-fluid mt-3" >
+	<div class="row">
+		
+		<!-- filter -->
+
+		<div class="col-lg-3 mx-auto">
+			<div class="list-group">
+
+				<a href="/" class="list-group-item list-group-item-action" style="background-color:#e3e3df ; color:Tomato; font-size: 24px; font-family: Georgia, 'Times New Roman', Times, serif;">All Products</a>
+
+				{% for category in categories %}
+				<a href="/?category={{category.id}}"
+					class="list-group-item list-group-item-action" style="background-color:#e3e2df ; color:#5d001e; font-family: Georgia, 'Times New Roman', Times, serif;">{{category.name}}</a>
+				{% endfor %}
+			</div>
+		</div>
+
+		
+		<!-- all products -->
+		<div id='products' class="col-lg-9 mx-auto" style="background-color: #1f2833;">
+			<div class="row mx-auto">
+				{% for product in products %}
+				<div class="card mx-auto mb-3" id={{product.id}} style="width: 18rem;">
+					<img class="card-img-top" src="{{product.image.url}}" alt="Card image cap">
+					<div class="card-body">
+						<p class="card-title">{{product.name}}</p>
+						
+						<p class="card-text"><b>{{product.price|currency}}</b></p>
+						<!-- {{product | is_in_cart:request.session.cart }} -->
+					</div>
+
+					<div class="card-footer p-0 no-gutters">
+
+						{% if product|is_in_cart:request.session.cart %}
+						<div class="row no-gutters">
+							<form action="/#{{product.id}}" class="col-2 " method="post">
+								{% csrf_token %}
+								<input hidden type="text" name='product' value='{{product.id}}'>
+								<input hidden type="text" name='remove' value='True'>
+								<input type="submit" value=" - " class="btn btn-block btn-light border-right">
+							</form>
+							<div class="text-center col">{{product|cart_quantity:request.session.cart}} in Cart</div>
+							<form action="/#{{product.id}}" class="col-2 " method="post">
+								{% csrf_token %}
+								<input hidden type="text" name='product' value='{{product.id}}'>
+								<input type="submit" value=" + " class="btn btn-block btn-light border-left">
+							</form>
+						</div>
+						{% else %}
+						<form action="/#{{product.id}}" method="POST" class="btn-block">
+							{% csrf_token %}
+							<input hidden type="text" name='product' value='{{product.id}}'>
+							<input type="submit" class="float-right btn btn-light  form-control"
+								value="Add To Cart">
+						</form>
+						{% endif %}
+
+					</div>
+
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+
+            <div style="background-color:#1f2833 ;"> 
+			  <form action="/store" method="POST" style="background-color:#1f2833;">
+				{% csrf_token %}
+				  <!-----  Payment Gateway -->
+				  <!-- <h4  style = "color: White; text-align: center;"> Feedback </h4> -->
+				  <div class="card" style="background-color:#1f2833;" >
+				
+					<div  class = "center" style="width:250px; margin:0 auto; background-color:#1f2833 ;">
+					  <label for="" style = "color: White; text-align: center; ">Submit your feedback!!</label> <br>
+					  
+					  <textarea placeholder='Enter feedback here...' rows="4" cols="50"maxlength='1000' minlength='5'></textarea>  
+					</div>
+					<br> 
+					<div  class = "center" style="width:250px; margin:0 auto;">
+						
+						<input id="submitForm" type="submit" class="btn float-right btn-outline-info col-lg-6" value="Submit" onclick="my_button_click_handler">
+						
+						
+					  </div>
+				<br>
+				<br>
+					
+			  </form>
+			</div>
+
+
+
+</div><script>
+	function my_button_click_handler()
+	{
+	alert('Button Clicked');
+	}
+	</script>
+
+
+{% endblock %}

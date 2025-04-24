@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=G:\Texas state university\Assignments\Spring-25\AdvanceSWEP\venv
+set VIRTUAL_ENV=G:\AdvanceSWEP\venv
 
 if not defined PROMPT set PROMPT=$P$G
 

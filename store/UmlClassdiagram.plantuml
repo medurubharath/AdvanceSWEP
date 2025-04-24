@@ -1,0 +1,41 @@
+@startuml
+!define icon_width 30
+!define icon_height 30
+
+title E-Mart Class Diagram
+
+
+class Product {
+  - name: String
+  - price: Float
+  + getName(): String
+  + getPrice(): Float
+}
+
+class Order {
+  - items: List
+  - total: Float
+  + addItem(item: Item)
+  + getTotal(): Float
+  + checkout(): Boolean
+}
+
+class Category {
+  - items: List
+  + addItem(item: Item)
+  + removeItem(item: Item)
+  + checkout(): Order
+}
+class Customer {
+  - name: String
+  - email: String
+  - address: String
+  + getName(): String
+  + getEmail(): String
+  + getAddress(): String
+}
+
+Category --> Product
+Order --> Product
+Order --> Customer
+@enduml
